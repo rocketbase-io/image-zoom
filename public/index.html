@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ZoomImage</title>
+  <script src="dist/zoom-image.umd.js"></script>
+  <style type="text/css">
+  </style>
+</head>
+
+<body>
+<img id="zoom-image" src="image.jpg" width="600" style="margin: 300px">
+<img id="zoom-image-multi" src="image.jpg" width="600" style="margin: 300px">
+<script>
+window.zoom = ZoomImage.default.create("#zoom-image", {
+  factor: 4,
+  scale: 200,
+  shape: "circle",
+  position: "cursor",
+  // offset: ["-50%", "-50%"],
+  // offset: [0, 0],
+  overlayClass: "overlay"
+});
+
+window.multiZoom = ZoomImage.default.createMulti("#zoom-image-multi", ...[1.25,1.45,1.7,2].map(factor => ({ factor, scale: 1000 / Math.exp(factor), shape: "circle" })));
+</script>
+</body>
+</html>
