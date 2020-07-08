@@ -10,7 +10,8 @@ describe("normalizeOptions", () => {
       shape: "circle",
       position: "cursor",
       offset: [-100, -100],
-      overlayClass: "rocket-zoom-image-overlay",
+      zoomClass: "rocket-zoom-image-zoom",
+      viewportClass: "rocket-zoom-image-viewport",
       hide: true
     });
   });
@@ -19,9 +20,8 @@ describe("normalizeOptions", () => {
     expect(normalizeOptions({
       factor: 3,
       scale: 400,
-      shape: "square",
       position: "fixed",
-      overlayClass: [],
+      zoomClass: [],
       hide: false
     })).toEqual({
       factor: 3,
@@ -29,7 +29,8 @@ describe("normalizeOptions", () => {
       shape: "square",
       position: "fixed",
       offset: [-200, -200],
-      overlayClass: [],
+      zoomClass: [],
+      viewportClass: "rocket-zoom-image-viewport",
       hide: false
     });
   });

@@ -20,3 +20,4 @@ describe("Bound", () => {
     expect(method1).toBe(method2);
   });
 });
+

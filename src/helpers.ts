@@ -1,21 +1,25 @@
 import { normalizeOptions, ZoomImageOptions } from "src/options";
+import { resolve } from "src/resolve";
 import { ZoomImage } from "src/zoom-image";
 
-export function attachZoom(el: HTMLImageElement, zoom: ZoomImage): ZoomImage {
+export function attach(el: HTMLImageElement, zoom: ZoomImage): ZoomImage {
   return (el as any).__zoom = zoom;
 }
 
-export function detachZoom(el: HTMLImageElement) {
+export function detach(el: HTMLImageElement) {
   delete (el as any).__zoom;
 }
 
-export function hasZoom(el: HTMLImageElement) {
-  return !!(el as any).__zoom;
+export function get(el: HTMLImageElement | string): ZoomImage | undefined {
+  return (resolve(el) as any).__zoom;
+}
+
+export function has(el: HTMLImageElement | string) {
+  return !!get(el);
 }
 
 export function create(el: HTMLImageElement | string, options?: Partial<ZoomImageOptions>) {
-  if (typeof el === "string") el = document.querySelector(el) as HTMLImageElement;
-  if (!el) throw new Error("No elements provided or no element matching selector!");
-  if (hasZoom(el)) throw new Error("Element does already have a ZoomImage instance attached!");
-  return attachZoom(el, new ZoomImage(el, normalizeOptions(options)));
+  el = resolve(el) as HTMLImageElement;
+  if (has(el)) throw new Error("Element does already have a ZoomImage instance attached!");
+  return attach(el, new ZoomImage(el, normalizeOptions(options)));
 }

@@ -1,7 +1,4 @@
-import { Bound } from "src/bound";
-import { ZoomImageOptions, normalizeOptions } from "src/options";
-
-
-
+export * from "src/helpers";
+export * from "src/zoom-image";
 
 

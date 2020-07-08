@@ -57,10 +57,12 @@ export default {
     nodeResolve(),
     json({ compact: true }),
     ts({ tsconfig: "tsconfig.build.json" }),
-    serve({
-      contentBase: ["public", "."],
-      historyApiFallback: "public/index.html"
-    }),
-    livereload({ watch: ["dist", "public"] })
+    ...(process.env.NODE_ENV !== "production" ? [
+      serve({
+        contentBase: ["public", "."],
+        historyApiFallback: "public/index.html"
+      }),
+      livereload({ watch: ["dist", "public"] })
+    ] : [])
   ]
 };

@@ -1,7 +1,7 @@
-// import ZoomImage from "src/index";
+import * as ZoomImage from "src/index";
 
 describe("index.ts", () => {
   it("should export its members", () => {
-    // expect(ZoomImage).toBeDefined();
+    expect(ZoomImage.create).toBeDefined();
   });
 });
