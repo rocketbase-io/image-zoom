@@ -26,7 +26,7 @@ export class ZoomImage {
   }
 
   public destroy() {
-    this.view?.destroy();
     this.zoom?.destroy();
+    this.view?.destroy();
   }
 }
