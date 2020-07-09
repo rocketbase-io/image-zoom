@@ -6,26 +6,23 @@ export class ZoomImage {
   public view!: View;
   public zoom!: Zoom;
 
-  constructor(
-    public reference: HTMLImageElement,
-    public options: ZoomImageOptions
-  ) {
+  constructor(public reference: HTMLImageElement, public options: ZoomImageOptions) {
     this.create();
   }
 
-  public setOptions(options: Partial<ZoomImageOptions>) {
+  public setOptions(options: Partial<ZoomImageOptions>): void {
     this.options = normalizeOptions(options);
     this.destroy();
     this.create();
   }
 
-  public create() {
+  public create(): void {
     const { reference, options } = this;
-    const view = this.view = new View(reference, options);
+    const view = (this.view = new View(reference, options));
     this.zoom = new Zoom(reference, view, options);
   }
 
-  public destroy() {
+  public destroy(): void {
     this.zoom?.destroy();
     this.view?.destroy();
   }

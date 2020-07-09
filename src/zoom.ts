@@ -6,38 +6,33 @@ import { View } from "src/view";
 
 export class Zoom {
   private el?: HTMLImageElement;
-  public constructor(
-    private reference: HTMLImageElement,
-    private view: View,
-    private options: ZoomImageOptions
-  ) {
+  public constructor(private reference: HTMLImageElement, private view: View, private options: ZoomImageOptions) {
     reference.addEventListener("mousemove", this.onMouseMove, { passive: true });
   }
 
-  public get element() {
-    return this.el ?? (this.el = this.createZoom())
+  public get element(): HTMLImageElement {
+    return this.el ?? (this.el = this.createZoom());
   }
 
-  public get viewportDimensions() {
+  public get viewportDimensions(): { width: number; height: number } {
     const { clientWidth: width, clientHeight: height } = this.view.element;
     return { width, height };
   }
 
-  public getCssDimensions(el: HTMLElement) {
+  public getCssDimensions(el: HTMLElement): { width: string; height: string } {
     const { width, height } = getComputedStyle(el);
     return { width, height };
   }
 
-  public getOffsetFactor(ev: MouseEvent) {
+  public getOffsetFactor(ev: MouseEvent): { x: number; y: number } {
     const { clientWidth, clientHeight } = this.reference;
     const { offsetX, offsetY } = ev;
-    const x = - offsetX / clientWidth;
-    const y = - offsetY / clientHeight;
+    const x = -offsetX / clientWidth;
+    const y = -offsetY / clientHeight;
     return { x, y };
   }
 
-
-  public createZoom() {
+  public createZoom(): HTMLImageElement {
     const { view, options, reference } = this;
     const { factor, zoomClass } = options;
     const image = document.createElement("img");
@@ -51,7 +46,7 @@ export class Zoom {
       width,
       height,
       willChange: "top, left",
-      maxWidth: "unset"
+      maxWidth: "unset",
     });
     addClasses(image, zoomClass);
     view.attachZoom(image);
@@ -59,20 +54,20 @@ export class Zoom {
   }
 
   @Bound
-  public onMouseMove(ev: MouseEvent) {
+  public onMouseMove(ev: MouseEvent): void {
     const { x, y } = this.getOffsetFactor(ev);
     const { width, height } = this.viewportDimensions;
     const { element, options } = this;
-    element.style.transform = `translate(${width / 2}px, ${height / 2}px) scale(${options.factor}) translate(${x * 100}%, ${y * 100}%)`
+    element.style.transform = `translate(${width / 2}px, ${height / 2}px) scale(${options.factor}) translate(${x * 100}%, ${y * 100}%)`;
   }
 
-  public destroy() {
+  public destroy(): void {
     this.reference.removeEventListener("mousemove", this.onMouseMove);
     if (this.el) this.view.detachZoom(this.el);
     delete this.el;
     // @ts-expected-error
     delete this.reference;
     // @ts-expected-error
-    delete this.view
+    delete this.view;
   }
 }

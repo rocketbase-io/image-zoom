@@ -6,13 +6,9 @@ import { resolve } from "src/resolve";
 
 export class View {
   private el?: HTMLDivElement;
-  public constructor(
-    private reference: HTMLImageElement,
-    private options: ZoomImageOptions
-  ) {
+  public constructor(private reference: HTMLImageElement, private options: ZoomImageOptions) {
     const { onMouseMove, onMouseEnter, onMouseLeave } = this;
-    if (options.position === "cursor")
-      reference.addEventListener("mousemove", onMouseMove, { passive: true });
+    if (options.position === "cursor") reference.addEventListener("mousemove", onMouseMove, { passive: true });
     if (options.hide) {
       reference.addEventListener("mouseenter", onMouseEnter);
       reference.addEventListener("mouseleave", onMouseLeave);
@@ -22,11 +18,11 @@ export class View {
     }
   }
 
-  public setVisible(visible: boolean) {
+  public setVisible(visible: boolean): void {
     this.element.style.opacity = visible ? "1" : "0";
   }
 
-  public get element() {
+  public get element(): HTMLDivElement {
     return this.el ?? (this.el = this.createView());
   }
 
@@ -42,34 +38,36 @@ export class View {
       overflow: "hidden",
       boxSizing: "border-box",
       cursor: "none",
-      transition: "opacity .2s ease-in-out"
+      transition: "opacity .2s ease-in-out",
     });
     addClasses(el, options.viewportClass);
     return el;
   }
 
-  public updateDimensions(el: HTMLDivElement = this.element) {
+  public updateDimensions(el: HTMLDivElement = this.element): void {
     const { reference, options } = this;
     const { shape, scale, position, offset } = options;
     const { offsetTop, offsetLeft, clientWidth, clientHeight } = reference;
-    if (position === "cover") assign(el!.style, {
-      left: `${offsetLeft}px`,
-      top: `${offsetTop}px`,
-      width: `${clientWidth}px`,
-      height: `${clientHeight}px`
-    });
-    if (position === "cursor") assign(el!.style, {
-      width: `${scale}px`,
-      height: `${scale}px`,
-      maxWidth: `${scale}px`,
-      maxHeight: `${scale}px`,
-      willChange: "top, left",
-      transform: `translate(${offset.map(it => `${it}px`).join(",")})`
-    });
+    if (position === "cover")
+      assign(el!.style, {
+        left: `${offsetLeft}px`,
+        top: `${offsetTop}px`,
+        width: `${clientWidth}px`,
+        height: `${clientHeight}px`,
+      });
+    if (position === "cursor")
+      assign(el!.style, {
+        width: `${scale}px`,
+        height: `${scale}px`,
+        maxWidth: `${scale}px`,
+        maxHeight: `${scale}px`,
+        willChange: "top, left",
+        transform: `translate(${offset.map((it) => `${it}px`).join(",")})`,
+      });
     if (shape === "circle") el!.style.borderRadius = "100000px";
   }
 
-  public updatePosition(ev: MouseEvent, el: HTMLDivElement = this.element) {
+  public updatePosition(ev: MouseEvent, el: HTMLDivElement = this.element): void {
     if (this.options.position !== "cursor") return;
     const { offsetX, offsetY } = ev;
     const { offsetTop, offsetLeft } = this.reference;
@@ -78,32 +76,32 @@ export class View {
     style.left = `${offsetX + offsetLeft}px`;
   }
 
-  public attachZoom(el: HTMLImageElement) {
+  public attachZoom(el: HTMLImageElement): void {
     this.element.appendChild(el);
   }
 
-  public detachZoom(el: HTMLImageElement) {
+  public detachZoom(el: HTMLImageElement): void {
     this.element.removeChild(el);
   }
 
   @Bound
-  onMouseMove(ev: MouseEvent) {
+  onMouseMove(ev: MouseEvent): void {
     this.updatePosition(ev);
   }
 
   @Bound
-  onMouseEnter(ev: MouseEvent) {
+  onMouseEnter(ev: MouseEvent): void {
     this.updateDimensions();
     this.updatePosition(ev);
     if (this.options.hide) this.setVisible(true);
   }
 
   @Bound
-  onMouseLeave(ev: MouseEvent) {
+  onMouseLeave(): void {
     if (this.options.hide) this.setVisible(false);
   }
 
-  public destroy() {
+  public destroy(): void {
     const { reference, onMouseMove, onMouseEnter, onMouseLeave } = this;
     reference.removeEventListener("mousemove", onMouseMove);
     reference.removeEventListener("mouseenter", onMouseEnter);

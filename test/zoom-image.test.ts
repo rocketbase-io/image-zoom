@@ -1,7 +1,7 @@
 import * as ZoomImage from "src/index";
 
 const wrapper: HTMLDivElement = document.createElement("div");
-beforeEach(() => wrapper.innerHTML = "");
+beforeEach(() => (wrapper.innerHTML = ""));
 const img = () => {
   const img = document.createElement("img");
   wrapper.appendChild(img);

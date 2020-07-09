@@ -2,13 +2,12 @@ import * as ZoomImage from "src/index";
 import { normalizeOptions } from "src/options";
 
 const wrapper: HTMLDivElement = document.createElement("div");
-beforeEach(() => wrapper.innerHTML = "");
+beforeEach(() => (wrapper.innerHTML = ""));
 const img = () => {
   const img = document.createElement("img");
   wrapper.appendChild(img);
   return img;
 };
-
 
 describe("has", () => {
   it("should return false if a given element or selector has no ZoomImage instance attached", () => {
@@ -25,7 +24,7 @@ describe("has", () => {
 
   it("should throw for unresolvable selectors", () => {
     expect(() => ZoomImage.has("#does-not-exist")).toThrow();
-  })
+  });
 });
 
 describe("get", () => {
